@@ -18,9 +18,6 @@
 </template>
 
 <script>
-import io from 'socket.io-client'
-const socket = io('http://tickbot-server.willisite.com/')
-
 export default {
   data () {
     return {
@@ -29,12 +26,12 @@ export default {
   },
   ready () {
     this.list()
-    socket.on('post', res => this.entries.push(res.entry))
-    socket.on('put', res => {
+    this.$socket.on('post', res => this.entries.push(res.entry))
+    this.$socket.on('put', res => {
       const element = this.entries.find(entry => entry._id === res.id)
       this.entries.$set(element, res.message)
     })
-    socket.on('delete', id => {
+    this.$socket.on('delete', id => {
       const element = this.entries.find(entry => entry._id === id)
       this.entries.$remove(element)
     })
@@ -46,7 +43,7 @@ export default {
         .catch(e => console.log(e))
     },
     delEntry (id) {
-      socket.emit('delete', { id })
+      this.$socket.emit('delete', { id })
     }
   }
 }

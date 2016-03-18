@@ -64,9 +64,6 @@ input[type=number]::-webkit-outer-spin-button {
 </template>
 
 <script>
-import io from 'socket.io-client'
-const socket = io('http://tickbot-server.willisite.com/')
-
 export default {
   data () {
     return {
@@ -81,7 +78,7 @@ export default {
   },
   methods: {
     newEntry () {
-      socket.emit('post', { entry: this.entry })
+      this.$socket.emit('post', { entry: this.entry })
     },
     getUsers () {
       this.$http.get('https://slack.com/api/users.list?token=xoxp-3160746258-17429586099-26955572661-b1293c7688&pretty=1')
