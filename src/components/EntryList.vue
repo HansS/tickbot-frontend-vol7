@@ -29,6 +29,15 @@ export default {
   },
   ready () {
     this.list()
+    socket.on('post', res => this.entries.push(res.entry))
+    socket.on('put', res => {
+      const element = this.entries.find(entry => entry._id === res.id)
+      this.entries.$set(element, res.message)
+    })
+    socket.on('delete', id => {
+      const element = this.entries.find(entry => entry._id === id)
+      this.entries.$remove(element)
+    })
   },
   methods: {
     list () {
