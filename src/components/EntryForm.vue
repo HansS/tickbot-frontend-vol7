@@ -18,9 +18,9 @@ input[type=number]::-webkit-outer-spin-button {
     <form class="col s12" @submit.prevent>
       <div class="row">
         <div class="input-field col s12">
-          <select class="browser-default" v-model="entry.name">
+          <select class="browser-default" v-model="entry.member">
             <option value="" disabled selected>Member</option>
-            <option v-for="member in members" :value="member.profile.real_name" data-icon="{{ member.profile.image_48 }}">
+            <option v-for="member in members" :value="{ name: member.profile.real_name, avatar: member.profile.image_48 }" data-icon="{{ member.profile.image_48 }}">
               {{ member.profile.real_name }}
             </option>
           </select>
@@ -70,7 +70,7 @@ const socket = io('http://tickbot-server.willisite.com/')
 export default {
   data () {
     return {
-      entry: { name: '', project: '', hours: '', notes: '', created: '' },
+      entry: { member: {name: '', avatar: ''}, project: '', hours: '', notes: '', created: '' },
       projects: ['tickbot', 'tickbot-server', 'tickbot-frontend'],
       members: [
         {
@@ -114,7 +114,6 @@ export default {
   },
   methods: {
     newEntry () {
-      console.log(this.entry)
       socket.emit('post', { entry: this.entry })
     }
   }

@@ -3,8 +3,8 @@
     <ul class="collapsible" data-collapsible="expandable">
       <li v-for="entry in entries" track-by="_id">
         <div class="collapsible-header">
-          <img :src="entry.avatar" alt="" class="circle">
-          {{ entry.name }} - {{ entry.project }}
+          <img :src="entry.member.avatar" alt="" class="circle">
+          {{ entry.member.name }} {{ entry.project }}
         </div>
         <div class="collapsible-body">
           <p>{{ entry.created  | moment "DD/MM//YY - h:mm a" }}</p>
