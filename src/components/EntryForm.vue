@@ -1,11 +1,26 @@
+<style>
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+</style>
+
 <template>
   <validator name="entry">
+
+    <div class="validations col s12">
+      <p v-if="$entry.created.required">Date required.</p>
+    </div>
+
     <form class="col s12" @submit.prevent>
 
       <div class="row">
         <div class="input-field col s12">
-          <select class="icons" v-model="entry.username">
-            <option class="left circle" v-for="member in members" v-bind:value="member.profile.real_name" data-icon="{{ member.profile.image_48 }}">
+          <select class="icons" v-model="entry.name">
+            <option class="left circle" v-for="member in members" :value="member.profile.real_name" data-icon="{{ member.profile.image_48 }}">
               {{ member.profile.real_name }}
             </option>
           </select>
@@ -16,7 +31,7 @@
       <div class="row">
         <div class="input-field col s12">
           <select v-model="entry.project">
-            <option v-for="project in projects" v-bind:value="project">
+            <option v-for="project in projects" :value="entry.project">
               {{ project }}
             </option>
           </select>
@@ -42,23 +57,21 @@
         <input type="date" class="datepicker" v-model="entry.created" v-validate:created="['required']">
         <label for="date">Date</label>
       </div>
-      <!-- <div class="validations">
-      <p v-if="$entry.created.required">Date required.</p>
-      v-if="$entry.valid"
-    </div> -->
-      <input class="waves-effect waves-light btn" type="submit" value="Submit" @click="newEntry"></input>
+
+      <input class="waves-effect waves-light btn" type="submit" value="Submit" v-if="$entry.valid" @click="newEntry"></input>
+
     </form>
   </valdator>
 </template>
 
 <script>
 import io from 'socket.io-client'
-const socket = io('http://localhost:1338')
+const socket = io('http://tickbot-server.willisite.com/')
 
 export default {
   data () {
     return {
-      entry: '',
+      entry: { username: '', project: '', hours: '', notes: '', created: '' },
       projects: ['tickbot', 'tickbot-server', 'tickbot-frontend'],
       members: [
         {
@@ -107,13 +120,3 @@ export default {
   }
 }
 </script>
-
-<style>
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  margin: 0;
-}
-</style>

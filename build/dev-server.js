@@ -10,7 +10,7 @@ var compiler = webpack(config)
 // https://github.com/chimurai/http-proxy-middleware
 var proxyTable = {
   '/api': {
-    target: 'http://localhost:1338',
+    target: 'http://tickbot-server.willisite.com/',
     changeOrigin: true,
     pathRewrite: {
       '^/api': ''
