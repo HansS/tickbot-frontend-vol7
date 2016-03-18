@@ -1,7 +1,7 @@
 <template>
   <div class="row" v-show="entries.length">
     <ul class="collapsible" data-collapsible="expandable">
-      <li v-for="entry in entries" track-by="_id" :class="{ editing: entry == editedEntry }">
+      <li v-for="entry in entries" track-by="_id">
         <div class="collapsible-header">
           <img :src="entry.avatar" alt="" class="circle">
           {{ entry.name }} - {{ entry.project }}

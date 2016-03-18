@@ -16,26 +16,25 @@ input[type=number]::-webkit-outer-spin-button {
     </div>
 
     <form class="col s12" @submit.prevent>
-
       <div class="row">
         <div class="input-field col s12">
-          <select class="icons" v-model="entry.name">
-            <option class="left circle" v-for="member in members" :value="member.profile.real_name" data-icon="{{ member.profile.image_48 }}">
+          <select class="browser-default" v-model="entry.name">
+            <option value="" disabled selected>Member</option>
+            <option v-for="member in members" :value="member.profile.real_name" data-icon="{{ member.profile.image_48 }}">
               {{ member.profile.real_name }}
             </option>
           </select>
-          <label>Member</label>
         </div>
       </div>
 
       <div class="row">
         <div class="input-field col s12">
-          <select v-model="entry.project">
-            <option v-for="project in projects" :value="entry.project">
+          <select class="browser-default" v-model="entry.project" :value="project">
+            <option value="" disabled selected>Project</option>
+            <option v-for="project in projects">
               {{ project }}
             </option>
           </select>
-          <label>Project</label>
         </div>
       </div>
 
@@ -71,7 +70,7 @@ const socket = io('http://tickbot-server.willisite.com/')
 export default {
   data () {
     return {
-      entry: { username: '', project: '', hours: '', notes: '', created: '' },
+      entry: { name: '', project: '', hours: '', notes: '', created: '' },
       projects: ['tickbot', 'tickbot-server', 'tickbot-frontend'],
       members: [
         {
@@ -115,6 +114,7 @@ export default {
   },
   methods: {
     newEntry () {
+      console.log(this.entry)
       socket.emit('post', { entry: this.entry })
     }
   }

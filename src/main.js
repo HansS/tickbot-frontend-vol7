@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Material from 'vue-mdl'
 import App from './App'
+
 import io from 'socket.io-client'
 const socket = io('http://tickbot-server.willisite.com/')
 
@@ -20,7 +21,7 @@ const vm = new Vue({
   }
 })
 
-socket.on('post', res => vm.$children[0].$children[1].entries.push(res.message))
+socket.on('post', res => vm.$children[0].$children[1].entries.push(res.entry))
 
 socket.on('put', res => {
   const element = vm.entries.find(entry => entry._id === res.id)
