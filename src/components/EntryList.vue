@@ -1,10 +1,26 @@
 <template>
+
+  <div class="row">
+    <div class="input-field col s12">
+      <label for="search">Search</label>
+      <input type="text" v-model="search">
+    </div>
+  </div>
+
   <div class="row" v-show="entries.length">
-    <ul class="collapsible" data-collapsible="expandable">
-      <li v-for="entry in entries" track-by="_id">
-        <div class="collapsible-header">
+    <ul class="" data-collapsible="expandable">
+      <li v-for="entry in entries | filterBy search" track-by="_id">
+        <div class="r">
           <img :src="entry.member.avatar" alt="" class="circle">
-          {{ entry.member.name }} {{ entry.project }}
+          <label v-text="entry.member.name" @dblclick="editing = true"></label>
+          <input class="edit"
+            v-show="editing"
+            v-focus="editing"
+            :value="entry.member.name"
+            @keyup.enter="doneEdit"
+            @keyup.esc="cancelEdit"
+            @blur="doneEdit">
+          {{ entry.project }}
         </div>
         <div class="collapsible-body">
           <p>{{ entry.created  | moment "DD/MM//YY - h:mm a" }}</p>
@@ -21,6 +37,8 @@
 export default {
   data () {
     return {
+      search: '',
+      editing: false,
       entries: []
     }
   },
@@ -36,6 +54,13 @@ export default {
       this.entries.$remove(element)
     })
   },
+  directives: {
+    focus (value) {
+      if (value) {
+        this.vm.$nextTick(() => this.el.focus())
+      }
+    }
+  },
   methods: {
     list () {
       this.$http.get('api/entries')
@@ -44,6 +69,19 @@ export default {
     },
     delEntry (id) {
       this.$socket.emit('delete', { id })
+    },
+    doneEdit (e) {
+      const value = e.target.value.trim()
+      if (!value) {
+        // this.deleteTodo(this.entry)
+      } else if (this.editing) {
+        // this.$http.put('api/entries/${e._id}')
+        this.editing = false
+      }
+    },
+    cancelEdit (e) {
+      e.target.value = this.todo.text
+      this.editing = false
     }
   }
 }
